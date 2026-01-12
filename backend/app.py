@@ -1,3 +1,5 @@
+import os
+os.makedirs("instance", exist_ok=True)
 from flask import Flask
 from backend.routes import main_routes
 from backend.config import Config
