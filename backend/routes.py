@@ -4,10 +4,9 @@ from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from backend.models import db, User, Quote, Product
 
-
 main_routes = Blueprint("main_routes", __name__)
 
-# ---------------- ADMIN GATE (BLOCK DIRECT /admin) ----------------
+# ---------------- BLOCK /admin ----------------
 @main_routes.route("/admin")
 def admin_gate():
     return redirect("/login")
@@ -51,7 +50,7 @@ def login():
 
     return render_template("login.html")
 
-# ---------------- REAL ADMIN PANEL ----------------
+# ---------------- DASHBOARD ----------------
 @main_routes.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -59,6 +58,7 @@ def dashboard():
 
     quotes = Quote.query.all()
     products = Product.query.all()
+
     return render_template("admin.html", quotes=quotes, products=products)
 
 # ---------------- LOGOUT ----------------
@@ -94,9 +94,23 @@ def add_product():
         )
         db.session.add(p)
         db.session.commit()
+
         return redirect("/dashboard")
 
     return render_template("add_product.html")
+
+# ---------------- DELETE PRODUCT ----------------
+@main_routes.route("/delete-product/<int:id>")
+def delete_product(id):
+    if "user" not in session:
+        return redirect("/login")
+
+    p = Product.query.get(id)
+    if p:
+        db.session.delete(p)
+        db.session.commit()
+
+    return redirect("/dashboard")
 
 # ---------------- QUOTE ----------------
 @main_routes.route("/quote", methods=["GET", "POST"])
@@ -110,6 +124,7 @@ def quote():
         db.session.add(q)
         db.session.commit()
         return redirect("/")
+
     return render_template("quote.html")
 
 # ---------------- PRODUCT DETAIL ----------------

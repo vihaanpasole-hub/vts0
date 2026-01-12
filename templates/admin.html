@@ -4,66 +4,60 @@
 <title>VTS Admin</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gradient-to-br from-black via-gray-900 to-black text-white">
 
 <div class="flex min-h-screen">
 
 <!-- Sidebar -->
-<div class="w-64 bg-black/60 backdrop-blur-xl border-r border-gray-800 p-6">
+<div class="w-64 bg-black/60 border-r border-gray-800 p-6">
   <h1 class="text-2xl font-bold text-green-400 mb-10">VTS Admin</h1>
 
-  <nav class="space-y-4 text-gray-300">
-    <a href="/admin" class="flex items-center gap-3 hover:text-green-400">
-      📊 Dashboard
-    </a>
-    <a href="/add-product" class="flex items-center gap-3 hover:text-green-400">
-      📦 Add Product
-    </a>
-    <a href="/products-page" class="flex items-center gap-3 hover:text-green-400">
-      🛒 Products
-    </a>
-    <a href="/quote" class="flex items-center gap-3 hover:text-green-400">
-      📩 Quotes
-    </a>
-    <a href="/logout" class="flex items-center gap-3 text-red-400">
-      🚪 Logout
-    </a>
+  <nav class="space-y-4">
+    <a href="/dashboard">📊 Dashboard</a>
+    <a href="/add-product">📦 Add Product</a>
+    <a href="/products-page">🛒 Products</a>
+    <a href="/logout" class="text-red-400">🚪 Logout</a>
   </nav>
 </div>
 
 <!-- Main -->
 <div class="flex-1 p-10">
 
-  <!-- Top Bar -->
-  <div class="flex justify-between items-center mb-10">
-    <h2 class="text-3xl font-bold">Dashboard</h2>
-    <span class="text-gray-400">Vaishnavi Time Solutions</span>
-  </div>
+<h2 class="text-3xl mb-6">Dashboard</h2>
 
-  <!-- Stats -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-    <div class="bg-white/5 backdrop-blur p-6 rounded-xl border border-gray-800 shadow-xl">
-      <p class="text-gray-400">Total Leads</p>
-      <h2 class="text-4xl text-green-400 font-bold">{{ quotes|length }}</h2>
-    </div>
+<h3 class="text-xl mb-4">Customer Enquiries</h3>
+<table class="w-full mb-10">
+<tr><th>Name</th><th>Phone</th><th>Message</th></tr>
+{% for q in quotes %}
+<tr><td>{{ q.name }}</td><td>{{ q.phone }}</td><td>{{ q.message }}</td></tr>
+{% endfor %}
+</table>
 
-    <div class="bg-white/5 backdrop-blur p-6 rounded-xl border border-gray-800 shadow-xl">
-      <p class="text-gray-400">Active Brands</p>
-      <h2 class="text-4xl text-green-400 font-bold">5</h2>
-    </div>
+<h3 class="text-xl mb-4">Products</h3>
 
-    <div class="bg-white/5 backdrop-blur p-6 rounded-xl border border-gray-800 shadow-xl">
-      <p class="text-gray-400">System</p>
-      <h2 class="text-4xl text-green-400 font-bold">Online</h2>
-    </div>
-  </div>
+<table class="w-full">
+<tr>
+  <th>Image</th>
+  <th>Brand</th>
+  <th>Name</th>
+  <th>Action</th>
+</tr>
 
-  <!-- Leads -->
-  <div class="bg-white/5 backdrop-blur border border-gray-800 rounded-xl p-6 shadow-xl">
-    <h3 class="text-xl mb-6">Customer Enquiries</h3>
+{% for p in products %}
+<tr>
+  <td><img src="/static/uploads/{{ p.image }}" height="60"></td>
+  <td>{{ p.brand }}</td>
+  <td>{{ p.name }}</td>
+  <td>
+    <a href="/delete-product/{{ p.id }}" class="bg-red-600 px-3 py-1"
+       onclick="return confirm('Delete?')">Delete</a>
+  </td>
+</tr>
+{% endfor %}
+</table>
 
-    <div class="overflow-x-auto">
-      <table class="w-full">
-        <thead>
-          <tr class="text-gray-400 border-b border-gray-700">
-            <th class="py-2
+</div>
+</div>
+</body>
+</html>
